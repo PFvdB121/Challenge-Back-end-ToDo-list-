@@ -5,7 +5,7 @@
 		$data = htmlspecialchars($data);
 		return $data;
 	}
-	function getList($user){
+	function getLists($user){
 		$db = createConnection();
 		$sql = "SELECT * FROM list WHERE user = :user";
 		$query = $db->prepare($sql);
@@ -34,6 +34,28 @@
 		$query->execute();
 
 		$db = null;
+
+		return $query->fetch();
+	}
+	function getUsers(){
+		$db = createConnection();
+		$sql = "SELECT * FROM users";
+		$query = $db->prepare($sql);
+		$query->execute();
+
+		$db = null;
+
+		return $query->fetchAll();
+	}
+	function getNonAdmins($password, $username){
+		$db = createConnection();
+		$sql = "SELECT * FROM users WHERE role = 'standard'";
+		$query = $db->prepare($sql);
+		$query->execute();
+
+		$db = null;
+		
+		return $query->fetchAll();
 	}
 
 	function insertList($user, $name){
@@ -47,8 +69,17 @@
 		$db = null;
 	}
 
-	function register(){
+	function register($firstName, $insertion, $lastName, $username, $password){
 		$db = createConnection();
-		$sql = "INSERT INTO `users`(`id`, `first name`, `insertion`, `last name`, `username`, `password`, `role`) VALUES ([value-1],[value-2],[value-3],[value-4],[value-5],[value-6],[value-7]);"
+		$sql = "INSERT INTO `users`(`first name`, `insertion`, `last name`, `username`, `password`, `role`) VALUES (:firstName, :insertion, :lastName, :username, 'standard');";
+		$query = $db->prepare($sql);
+		$query->bindParam(':firstName', $firstName);
+		$query->bindParam(':insertion', $insertion);
+		$query->bindParam(':lastName', $lastName);
+		$query->bindParam(':username', $username);
+		$query->bindParam(':password', $password);
+		$query->execute();
+
+		$db = null;
 	}
 ?>

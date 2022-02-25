@@ -1,16 +1,19 @@
 <?php 
-	if ($_SERVER["REQUEST_METHOD"] != "POST") {
+	session_start();
+	if (empty($_SESSION['email'])) {
 		header("Location: http://localhost/blok7+8/Challenge-Back-end-ToDo-list-/login.php");
 	}
 	require 'connection.php';
 	require 'function.php';
-	$test = getLists("test");
+	$lists = getLists($_SESSION['id']);
 	$title = "To Do";
 	require "header.php";
 ?>
+<p><?=$_SERVER['REQUEST_METHOD']?></p>
+<p><?=$_SESSION['id']?></p>
 		<div class="container" style="width: <?php echo ((count($test) + 1) * 220) . "px"?>;">
 			<?php 
-				for ($i=0; $i < count($test); $i++) { 
+				foreach ($lists as $list)	 { 
 			?>
 				<span class="lists">
 					<div class="list-container">
@@ -26,12 +29,22 @@
 			<?php 
 				}
 			?>
-			<span id="newList">
-				<button>+ Voeg een andere lijst toe</button>
+			<span class="lists">
+				<div id="newList" class="list-container">
+					<button>+ Voeg een andere lijst toe</button>
+				</div>
 			</span>
 		</div>
 		<script type="text/javascript">
-			var descriptions = []
+			var tasks = [
+				<?php foreach ($lists as $list)	
+					{
+				?>
+
+				<?php 
+					}
+				?>
+			];
 		</script>
 		<script src="script.js"></script>
 <?php 

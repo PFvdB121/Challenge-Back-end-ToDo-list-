@@ -25,12 +25,12 @@
 
 		$db = null;
 	}
-	function getUser($password, $username){
+	function getUser($email, $password){
 		$db = createConnection();
-		$sql = "SELECT * FROM users WHERE password = :password AND username = :username";
+		$sql = "SELECT * FROM users WHERE email = :email AND password = :password";
 		$query = $db->prepare($sql);
-		$query->bindParam(':password', $password);
-		$query->bindParam(':username', $username);
+		$query->bindParam(':password', $password, PDO::PARAM_STR);
+		$query->bindParam(':email', $email, PDO::PARAM_STR);
 		$query->execute();
 
 		$db = null;
@@ -47,7 +47,7 @@
 
 		return $query->fetchAll();
 	}
-	function getNonAdmins($password, $username){
+	function getNonAdmins(){
 		$db = createConnection();
 		$sql = "SELECT * FROM users WHERE role = 'standard'";
 		$query = $db->prepare($sql);
@@ -60,7 +60,7 @@
 
 	function insertList($user, $name){
 		$db = createConnection();
-		$sql = "INSERT INTO list(user, name) VALUES(:user, :name)";
+		$sql = "INSERT INTO list(user, name) VALUES(:user, ':name')";
 		$query = $db->prepare($sql);
 		$query->bindParam(':user', $user);
 		$query->bindParam(':name', $name);
@@ -69,17 +69,27 @@
 		$db = null;
 	}
 
-	function register($firstName, $insertion, $lastName, $username, $password){
+	function updateList($name){
 		$db = createConnection();
-		$sql = "INSERT INTO `users`(`first name`, `insertion`, `last name`, `username`, `password`, `role`) VALUES (:firstName, :insertion, :lastName, :username, 'standard');";
+		$sql = "UPDATE list SET(name=':name')";
 		$query = $db->prepare($sql);
-		$query->bindParam(':firstName', $firstName);
-		$query->bindParam(':insertion', $insertion);
-		$query->bindParam(':lastName', $lastName);
-		$query->bindParam(':username', $username);
-		$query->bindParam(':password', $password);
+		$query->bindParam(':name', $name);
 		$query->execute();
 
+		$db = null;
+	}
+
+	function register($firstName, $insertion, $lastName, $email, $password){
+		$a = 0;
+		$db = createConnection();
+		$sql = "INSERT INTO users(`first name`, `insertion`, `last name`, `email`, `password`, `role`) VALUES (:firstName, :insertion, :lastName, :email, :password, 'standard')";
+		$query = $db->prepare($sql);
+		$query->bindParam(':firstName', $firstName, PDO::PARAM_STR);
+		$query->bindParam(':insertion', $insertion, PDO::PARAM_STR);
+		$query->bindParam(':lastName', $lastName, PDO::PARAM_STR);
+		$query->bindParam(':email', $email, PDO::PARAM_STR);
+		$query->bindParam(':password', $password, PDO::PARAM_STR);
+		$query->execute();
 		$db = null;
 	}
 ?>

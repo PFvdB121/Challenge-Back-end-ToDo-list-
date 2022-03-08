@@ -1,7 +1,6 @@
 <?php 
 	$title = "login";
-	require 'connection.php';
-	require 'function.php';
+	include_once 'function.php';
 	require "header.php";
 	if ($_SERVER['REQUEST_METHOD'] == "POST") {
 		$user = getUser($_POST['email'], $_POST['password']);

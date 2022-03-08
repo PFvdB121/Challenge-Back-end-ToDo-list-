@@ -1,4 +1,5 @@
 <?php 
+	include_once 'connection.php';
 	function test_input($data){
 		$data = stripslashes($data);
 		$data = trim($data);
@@ -7,9 +8,9 @@
 	}
 	function getLists($user){
 		$db = createConnection();
-		$sql = "SELECT * FROM list WHERE user = :user";
+		$sql = "SELECT * FROM lists WHERE user = :user";
 		$query = $db->prepare($sql);
-		$query->bindParam(':user', $user);
+		$query->bindParam(':user', $user, PDO::PARAM_INT);
 		$query->execute();
 
 		$db = null;
@@ -18,12 +19,14 @@
 	}
 	function listParts($list){
 		$db = createConnection();
-		$sql = "SELECT * FROM task WHERE list = :list";
+		$sql = "SELECT * FROM tasks WHERE listID = :list";
 		$query = $db->prepare($sql);
-		$query->bindParam(':list', $list);
+		$query->bindParam(':list', $list, PDO::PARAM_INT);
 		$query->execute();
 
 		$db = null;
+
+		return $query->fetchAll();
 	}
 	function getUser($email, $password){
 		$db = createConnection();
@@ -60,27 +63,27 @@
 
 	function insertList($user, $name){
 		$db = createConnection();
-		$sql = "INSERT INTO list(user, name) VALUES(:user, ':name')";
+		$sql = "INSERT INTO lists(user, name) VALUES(:user, :name)";
 		$query = $db->prepare($sql);
-		$query->bindParam(':user', $user);
-		$query->bindParam(':name', $name);
+		$query->bindParam(':user', $user, PDO::PARAM_STR);
+		$query->bindParam(':name', $name, PDO::PARAM_INT);
 		$query->execute();
 
 		$db = null;
 	}
 
-	function updateList($name){
+	function updateList($name, $id){
 		$db = createConnection();
-		$sql = "UPDATE list SET(name=':name')";
+		$sql = "UPDATE lists SET name=:name WHERE id = :id";
 		$query = $db->prepare($sql);
-		$query->bindParam(':name', $name);
+		$query->bindParam(':name', $name, PDO::PARAM_STR);
+		$query->bindParam(':id', $id, PDO::PARAM_INT);
 		$query->execute();
 
 		$db = null;
 	}
 
 	function register($firstName, $insertion, $lastName, $email, $password){
-		$a = 0;
 		$db = createConnection();
 		$sql = "INSERT INTO users(`first name`, `insertion`, `last name`, `email`, `password`, `role`) VALUES (:firstName, :insertion, :lastName, :email, :password, 'standard')";
 		$query = $db->prepare($sql);
@@ -89,6 +92,25 @@
 		$query->bindParam(':lastName', $lastName, PDO::PARAM_STR);
 		$query->bindParam(':email', $email, PDO::PARAM_STR);
 		$query->bindParam(':password', $password, PDO::PARAM_STR);
+		$query->execute();
+		$db = null;
+	}
+
+	function deleteList($id){
+		$db = createConnection();
+		$sql = "DELETE FROM lists WHERE id = :id";
+		$query = $db->prepare($sql);
+		$query->bindParam(':id', $id, PDO::PARAM_INT);
+		$query->execute();
+		$db = null;
+	}
+
+	function insertTask($task, $list){
+		$db = createConnection();
+		$sql = "INSERT INTO tasks(`task`, `listID`) VALUES(:task, :list)";
+		$query = $db->prepare($sql);
+		$query->bindParam(':task', $task, PDO::PARAM_STR);
+		$query->bindParam(':list', $list, PDO::PARAM_INT);
 		$query->execute();
 		$db = null;
 	}

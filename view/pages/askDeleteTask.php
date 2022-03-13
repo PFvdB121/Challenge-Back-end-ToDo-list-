@@ -25,6 +25,7 @@
 
 	require "../pageParts/header.php";
 ?>
+
 	<div>
 		<header>
 			<h1>Weet u zeker dat u de taak <?=$task["task"]?> wilt verwijderen uit de lijst <?=$list["name"]?></h1>
@@ -35,6 +36,7 @@
 		</form>
 		<a href="http://localhost/blok7+8/Challenge-Back-end-ToDo-list-/view/pages/index.php" class="w3-red buttonLink">Nee</a>
 	</div>
+
 <?php 
 	require "../pageParts/footer.php"
 ?>

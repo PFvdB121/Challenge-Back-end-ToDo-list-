@@ -1,22 +1,37 @@
 <?php 
 	define('BASE_URL', $_SERVER['SERVER_NAME'] . "/.." . "/.." . "/.." . "/");
+	
 	include BASE_URL . 'controller/insertList/insertList.php';
+	
 	include BASE_URL . 'controller/updateList/updateList.php';
+	
 	include BASE_URL . 'controller/deleteList/deleteList.php';
+	
 	include BASE_URL . 'controller/insertTask/insertTask.php';
+	
 	include_once BASE_URL . 'controller/getTask/getTask.php';
+	
 	include_once BASE_URL . 'controller/getList/getList.php';
+	
 	include_once BASE_URL . 'controller/getUserById/getUserById.php';
+	
 	include BASE_URL . 'controller/getLists/getLists.php';
+	
 	include BASE_URL . 'controller/listParts/listParts.php';
+	
 	include BASE_URL . 'controller/listPartsF/listPartsF.php';
+	
 	include BASE_URL . 'controller/listPartsFO/listPartsFO.php';
+	
 	include BASE_URL . 'controller/listPartsO/listPartsO.php';
+	
 	include BASE_URL . 'controller/deleteTaskList/deleteTaskList.php';
+	
 	session_start();
 	if (empty($_SESSION['email'])) {
 		header("Location: http://localhost/blok7+8/Challenge-Back-end-ToDo-list-/view/login/login.php");
 	}
+
 	if ($_SERVER['REQUEST_METHOD'] == "POST") {
 		if ($_POST['action'] == "addList") {
 			insertList($_SESSION["id"], $_POST['name']);
@@ -34,6 +49,7 @@
 		}
 		header("Location: " . test_input($_SERVER['PHP_SELF']));
 	}
+
 	$listCount = 0;
 	$taskCount;
 	$lists = getLists($_SESSION['id']);

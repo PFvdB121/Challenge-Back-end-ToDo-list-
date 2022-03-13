@@ -2,8 +2,10 @@
 	$title = "login";
 	define('BASE_URL', $_SERVER['SERVER_NAME'] . "/.." . "/.." . "/.." . "/");
 	include '../../controller/getUser/getUser.php';
+	
 	if ($_SERVER['REQUEST_METHOD'] == "POST") {
 		$user = getUser($_POST['email'], $_POST['password']);
+		
 		if (!empty($user)) {
 			session_start();
 			session_unset();
@@ -15,6 +17,7 @@
 			$error = "email of wachtwoord is fout";
 		}
 	}
+
 	require "../pageParts/header.php";
 ?>
 <div class="w3-display-middle w3-white container">

@@ -1,8 +1,12 @@
 <?php 
 	define('BASE_URL', $_SERVER['SERVER_NAME'] . "/.." . "/.." . "/.." . "/");
+	
 	include BASE_URL . "/controller/getTask/getTask.php";
+	
 	include BASE_URL . "/controller/getList/getList.php";
+	
 	include BASE_URL . "/controller/getUserById/getUserById.php";
+	
 	include_once BASE_URL . "controller/checkUserTask/checkUserTask.php";
 
 	session_start();

@@ -1,22 +1,36 @@
 <?php 
-	include_once 'function.php';
+	define('BASE_URL', $_SERVER['SERVER_NAME'] . "/.." . "/.." . "/.." . "/");
+	include BASE_URL . 'controller/insertList/insertList.php';
+	include BASE_URL . 'controller/updateList/updateList.php';
+	include BASE_URL . 'controller/deleteList/deleteList.php';
+	include BASE_URL . 'controller/insertTask/insertTask.php';
+	include_once BASE_URL . 'controller/getTask/getTask.php';
+	include_once BASE_URL . 'controller/getList/getList.php';
+	include_once BASE_URL . 'controller/getUserById/getUserById.php';
+	include BASE_URL . 'controller/getLists/getLists.php';
+	include BASE_URL . 'controller/listParts/listParts.php';
+	include BASE_URL . 'controller/listPartsF/listPartsF.php';
+	include BASE_URL . 'controller/listPartsFO/listPartsFO.php';
+	include BASE_URL . 'controller/listPartsO/listPartsO.php';
+	include BASE_URL . 'controller/deleteTaskList/deleteTaskList.php';
 	session_start();
 	if (empty($_SESSION['email'])) {
-		header("Location: http://localhost/blok7+8/Challenge-Back-end-ToDo-list-/login.php");
+		header("Location: http://localhost/blok7+8/Challenge-Back-end-ToDo-list-/view/login/login.php");
 	}
 	if ($_SERVER['REQUEST_METHOD'] == "POST") {
 		if ($_POST['action'] == "addList") {
-			insertList($_SESSION["id"], test_input($_POST['name']));
+			insertList($_SESSION["id"], $_POST['name']);
 		}
 		elseif ($_POST["action"] == "updateList") {
 			updateList($_POST['name'], $_POST['id']);
 			$_SESSION[strval($_POST['id']) . "ID"] = array("filter" => $_POST["filter"], "order" => $_POST["order"]);
 		}
 		elseif ($_POST["action"] == "deleteList"){
-			deleteList(test_input($_POST['id']));
+			deleteTaskList($_POST['id']);
+			deleteList($_POST['id']);
 		}
 		elseif ($_POST["action"] == "addTask"){
-			insertTask(test_input($_POST["name"]), test_input($_POST["id"]));
+			insertTask($_POST["name"], $_POST["id"]);
 		}
 		header("Location: " . test_input($_SERVER['PHP_SELF']));
 	}
@@ -24,7 +38,7 @@
 	$taskCount;
 	$lists = getLists($_SESSION['id']);
 	$title = "To Do";
-	require "header.php";
+	require "../pageParts/header.php";
 ?>
 		<?php 
 			if (isset($_GET['taskId'])) {
@@ -38,8 +52,8 @@
 		?>
 		<div class="z3 bg">
 			<div class="taskContainer w3-white">
-				<a href="http://localhost/blok7+8/Challenge-Back-end-ToDo-list-/index.php" class="buttonLink rightTop w3-grey"><i class="fa fa-close"></i></a>
-				<form action="http://localhost/blok7+8/Challenge-Back-end-ToDo-list-/updatedTask.php" method="POST">
+				<a href="http://localhost/blok7+8/Challenge-Back-end-ToDo-list-/view/pages/index.php" class="buttonLink rightTop w3-grey"><i class="fa fa-close"></i></a>
+				<form action="http://localhost/blok7+8/Challenge-Back-end-ToDo-list-/controller/updatedTask/updatedTask.php" method="POST">
 					<input type="hidden" name="id" value="<?=$selTask['id']?>">
 					<input type="text" name="task" value="<?=$selTask['task']?>" class="bold">
 					<div>
@@ -67,7 +81,7 @@
 					</div>
 					<div>
 						<label for="durationTask" class="block">Nodige hoeveelheid minuten</label>
-						<input type="number" name="duration" id="durationTask" value="<?=$selTask['duration']?>" min="1">
+						<input type="number" name="duration" id="durationTask" value="<?=$selTask['duration']?>" min="0">
 					</div>
 					<div>
 						<label for="taskDescription" class="block">beschrijving</label>
@@ -85,7 +99,19 @@
 		<div style="width: <?php echo ((count($lists) + 1) * 220) . "px"?>;" id="container">
 			<?php 
 				for ($i=0; $i < count($lists); $i++) { 
-					$tasks = listParts($lists[$i]["id"], $_SESSION[strval($lists[$i]["id"])]["filter"], $_SESSION[strval($lists[$i]["id"])]["order"]);
+					if (isset($_SESSION[strval($lists[$i]["id"]) . "ID"]["filter"]) && isset($_SESSION[strval($lists[$i]["id"]) . "ID"]["order"]) && !empty($_SESSION[strval($lists[$i]["id"]) . "ID"]["filter"]) && !empty($_SESSION[strval($lists[$i]["id"]) . "ID"]["order"]) && $_SESSION[strval($lists[$i]["id"]) . "ID"]["filter"] != "" && $_SESSION[strval($lists[$i]["id"]) . "ID"]["order"] != "") {
+						$tasks = listPartsFO($lists[$i]["id"], $_SESSION[strval($lists[$i]["id"]) . "ID"]["filter"], $_SESSION[strval($lists[$i]["id"]) . "ID"]["order"]);
+					}
+					elseif (isset($_SESSION[strval($lists[$i]["id"]) . "ID"]["filter"]) && !empty($_SESSION[strval($lists[$i]["id"]) . "ID"]["filter"]) && $_SESSION[strval($lists[$i]["id"]) . "ID"]["filter"] != "") {
+						$tasks = listPartsF($lists[$i]["id"], $_SESSION[strval($lists[$i]["id"]) . "ID"]["filter"]);
+					}
+					elseif (isset($_SESSION[strval($lists[$i]["id"]) . "ID"]["order"]) && !empty($_SESSION[strval($lists[$i]["id"]) . "ID"]["order"]) && $_SESSION[strval($lists[$i]["id"]) . "ID"]["order"] != "") {
+						$tasks = listPartsO($lists[$i]["id"], $_SESSION[strval($lists[$i]["id"]) . "ID"]["order"]);
+					}
+					else{
+						$tasks = listParts($lists[$i]["id"]);
+					}
+					
 			?>
 				<span class="list-container w3-grey inlineBlock VATop">
 					<form action="<?=test_input($_SERVER['PHP_SELF'])?>" method="post" class="form">
@@ -144,10 +170,14 @@
 							for ($x=0; $x < count($tasks); $x++) {
 						?>
 							<li class="task w3-yellow">
-								<a href="http://localhost/blok7+8/Challenge-Back-end-ToDo-list-/askDeleteTask.php?id=<?=$tasks[$x]['id']?>" class="buttonLink w3-red">delete <?php print $tasks[$x]['task']?></a>
-								<form action="http://localhost/blok7+8/Challenge-Back-end-ToDo-list-/index.php" method="GET">
+								<a href="http://localhost/blok7+8/Challenge-Back-end-ToDo-list-/view/pages/askDeleteTask.php?id=<?=$tasks[$x]['id']?>" class="buttonLink w3-red">delete <?php print $tasks[$x]['task']?></a>
+								<form action="http://localhost/blok7+8/Challenge-Back-end-ToDo-list-/view/pages/index.php" method="GET">
 									<input type="hidden" name="taskId" value="<?=$tasks[$x]['id']?>">
-									<input type="submit" value="<?=$tasks[$x]['task']?>">
+									<p><?=$tasks[$x]['task']?></p>
+									<p>Hoeveelheid minuten: <?=$tasks[$x]['duration']?></p>
+									<p>Status: <?=$tasks[$x]['status']?></p>
+									<p class="w3-dark-grey">Voor meer informatie en om het aan te kunnen passen, klik hier:</p>
+									<input type="submit" value="informatie" class="w100">
 								</form>
 							</li>
 						<?php 
@@ -167,5 +197,5 @@
 		</div>
 		<script src="script.js"></script>
 <?php 
-	require "footer.php"
+	require "../pageParts/footer.php";
 ?>

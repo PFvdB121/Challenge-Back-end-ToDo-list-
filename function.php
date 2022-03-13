@@ -28,6 +28,43 @@
 
 		return $query->fetchAll();
 	}
+	function listPartsF($list, $filter){
+		$db = createConnection();
+		$sql = "SELECT * FROM tasks WHERE listID = :list AND status = :filter";
+		$query = $db->prepare($sql);
+		$query->bindParam(':list', $list, PDO::PARAM_INT);
+		$query->bindParam(':filter', $filter, PDO::PARAM_STR);
+		$query->execute();
+
+		$db = null;
+
+		return $query->fetchAll();
+	}
+	function listPartsO($list, $order){
+		$db = createConnection();
+		$sql = "SELECT * FROM tasks WHERE listID = :list ORDER BY duration :order";
+		$query = $db->prepare($sql);
+		$query->bindParam(':list', $list, PDO::PARAM_INT);
+		$query->bindParam(':order', $order, PDO::PARAM_STR);
+		$query->execute();
+
+		$db = null;
+
+		return $query->fetchAll();
+	}
+	function listPartsFO($list, $filter, $order){
+		$db = createConnection();
+		$sql = "SELECT * FROM tasks WHERE listID = :list AND status = :filter ORDER BY duration :order";
+		$query = $db->prepare($sql);
+		$query->bindParam(':list', $list, PDO::PARAM_INT);
+		$query->bindParam(':filter', $filter, PDO::PARAM_STR);
+		$query->bindParam(':order', $order, PDO::PARAM_STR);
+		$query->execute();
+
+		$db = null;
+
+		return $query->fetchAll();
+	}
 	function getUser($email, $password){
 		$db = createConnection();
 		$sql = "SELECT * FROM users WHERE email = :email AND password = :password";
@@ -65,8 +102,8 @@
 		$db = createConnection();
 		$sql = "INSERT INTO lists(user, name) VALUES(:user, :name)";
 		$query = $db->prepare($sql);
-		$query->bindParam(':user', $user, PDO::PARAM_STR);
-		$query->bindParam(':name', $name, PDO::PARAM_INT);
+		$query->bindParam(':user', $user, PDO::PARAM_INT);
+		$query->bindParam(':name', $name, PDO::PARAM_STR);
 		$query->execute();
 
 		$db = null;
@@ -107,10 +144,65 @@
 
 	function insertTask($task, $list){
 		$db = createConnection();
-		$sql = "INSERT INTO tasks(`task`, `listID`) VALUES(:task, :list)";
+		$sql = "INSERT INTO tasks(`task`, `status`, `listID`) VALUES(:task, 'nog bezig', :list)";
 		$query = $db->prepare($sql);
 		$query->bindParam(':task', $task, PDO::PARAM_STR);
 		$query->bindParam(':list', $list, PDO::PARAM_INT);
+		$query->execute();
+		$db = null;
+	}
+
+	function getTask($id){
+		$db = createConnection();
+		$sql = "SELECT * FROM tasks WHERE id = :id";
+		$query = $db->prepare($sql);
+		$query->bindParam(':id', $id, PDO::PARAM_INT);
+		$query->execute();
+		$db = null;
+
+		return $query->fetch();
+	}
+
+	function getList($id){
+		$db = createConnection();
+		$sql = "SELECT * FROM lists WHERE id = :id";
+		$query = $db->prepare($sql);
+		$query->bindParam(':id', $id, PDO::PARAM_INT);
+		$query->execute();
+		$db = null;
+
+		return $query->fetch();
+	}
+
+	function getUserById($id){
+		$db = createConnection();
+		$sql = "SELECT * FROM users WHERE id = :id";
+		$query = $db->prepare($sql);
+		$query->bindParam(':id', $id, PDO::PARAM_INT);
+		$query->execute();
+		$db = null;
+
+		return $query->fetch();
+	}
+
+	function deleteTask($id){
+		$db = createConnection();
+		$sql = "DELETE FROM tasks WHERE id = :id";
+		$query = $db->prepare($sql);
+		$query->bindParam(':id', $id, PDO::PARAM_INT);
+		$query->execute();
+		$db = null;
+	}
+
+	function updateTask($id, $task, $description, $duration, $status){
+		$db = createConnection();
+		$sql = "UPDATE tasks SET task=:task, description=:description, duration=:duration, status=:status WHERE id=:id";
+		$query = $db->prepare($sql);
+		$query->bindParam(':id', $id, PDO::PARAM_INT);
+		$query->bindParam(':task', $task, PDO::PARAM_STR);
+		$query->bindParam(':description', $description, PDO::PARAM_STR);
+		$query->bindParam(':duration', $duration, PDO::PARAM_INT);
+		$query->bindParam(':status', $status, PDO::PARAM_STR);
 		$query->execute();
 		$db = null;
 	}

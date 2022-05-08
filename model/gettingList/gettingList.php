@@ -1,6 +1,7 @@
 <?php
 	include_once(BASE_URL . 'model/connection/connection.php');
 		
+	//Hiermee wordt een lijst uit de database opgehaald
 	function gettingList($id){
 		$db = createConnection();
 		$sql = "SELECT * FROM lists WHERE id = :id";

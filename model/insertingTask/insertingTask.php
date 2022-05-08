@@ -1,6 +1,7 @@
 <?php 
 	include_once(BASE_URL . 'model/connection/connection.php');
 
+	//Hiermee worden taken toegevoegd aan de database
 	function insertingTask($task, $list){
 		$db = createConnection();
 		$sql = "INSERT INTO tasks(`task`, `duration`, `status`, `listID`) VALUES(:task, 0, 'nog bezig', :list)";

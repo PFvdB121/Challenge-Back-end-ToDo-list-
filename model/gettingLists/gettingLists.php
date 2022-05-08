@@ -1,6 +1,7 @@
 <?php
 	include_once(BASE_URL . 'model/connection/connection.php');
 	
+	//Hiermee worden alle lijsten van de gebruiker opgehaald uit de database
 	function gettingLists($user){
 		$db = createConnection();
 		$sql = "SELECT * FROM lists WHERE user = :user";

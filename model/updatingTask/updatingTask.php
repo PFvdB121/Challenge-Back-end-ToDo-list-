@@ -1,6 +1,7 @@
 <?php
 	include_once(BASE_URL . 'model/connection/connection.php');
 	
+	//Hiermee wordt een taak geüpdate in de database
 	function updatingTask($id, $task, $description, $duration, $status){
 		$db = createConnection();
 		$sql = "UPDATE tasks SET task=:task, description=:description, duration=:duration, status=:status WHERE id=:id";

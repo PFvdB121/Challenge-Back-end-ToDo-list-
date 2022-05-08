@@ -9,6 +9,8 @@
 
 	session_start();
 
+
+	//De taak wordt alleen aangepast als de gebruiker daarvan ook daadwerkelijk in bezit is
 	$_POST['id'] = test_input($_POST['id']);
 	
 	if (!empty($_SESSION['email']) && is_numeric($_POST['id'])) {

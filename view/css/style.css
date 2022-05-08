@@ -19,17 +19,25 @@ ul{
 	overflow: auto;
 }
 
+.block{
+	display: block;
+}
+
 .bold{
 	font-weight: bold;
+}
+
+.buttonLink{
+	margin: 2px;
+	border-width: 2px;
+	border-color: rgb(118, 118, 118);
+	border-style: solid;
+	text-decoration: none;
 }
 
 .container{
 	width: 50vw;
 	padding: 10vh 4vw;
-}
-
-.w100{
-	width: 100%;
 }
 
 .error{
@@ -42,18 +50,6 @@ ul{
 
 .inlineBlock{
 	display: inline-block;
-}
-
-.block{
-	display: block;
-}
-
-.buttonLink{
-	margin: 2px;
-	border-width: 2px;
-	border-color: rgb(118, 118, 118);
-	border-style: solid;
-	text-decoration: none;
 }
 
 .list-container{
@@ -84,11 +80,15 @@ ul{
 	min-height: 40vh;
 }
 
+.VATop{
+	vertical-align: top;
+}
+
+.w100{
+	width: 100%;
+}
+
 .z3{
 	z-index: 3;
 	background-color: rgba(0, 0, 0, 0.7);
-}
-
-.VATop{
-	vertical-align: top;
 }

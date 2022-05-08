@@ -1,6 +1,7 @@
 <?php 
 	include_once(BASE_URL . 'model/connection/connection.php');
 	
+	//Alle taken van de bijbehorende lijst worden hiermee opgehaald uit de database, gefilterd op status en op volgorde geplaatst van duur
 	function gettingListPartsFO($list, $filter, $order){
 		$db = createConnection();
 		$sql = "SELECT * FROM tasks WHERE listID = :list AND status = :filter ORDER BY duration " . $order;

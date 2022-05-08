@@ -5,6 +5,7 @@
 
 	session_start();
 
+	//Hiermee check ik of de gebruiker de eigenaar van de lijst is.
 	function checkUserList($id){
 		$list = getList(test_input($id));
 

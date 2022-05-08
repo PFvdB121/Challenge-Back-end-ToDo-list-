@@ -1,6 +1,7 @@
 <?php
 	include_once(BASE_URL . 'model/connection/connection.php');
 	
+	//Hiermee wordt een lijst toegevoegd aan de database
 	function insertingList($user, $name){
 		$db = createConnection();
 		$sql = "INSERT INTO lists(user, name) VALUES(:user, :name)";

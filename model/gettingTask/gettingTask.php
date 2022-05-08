@@ -1,6 +1,7 @@
 <?php	
 	include_once(BASE_URL . 'model/connection/connection.php');
 	
+	//Hiermee wordt een taak opgehaald uit de database
 	function gettingTask($id){
 		$db = createConnection();
 		$sql = "SELECT * FROM tasks WHERE id = :id";

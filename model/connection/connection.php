@@ -1,4 +1,5 @@
 <?php 
+	//Er wordt hiermee een connectie gemaakt met de sql database
 	function createConnection(){
 		try {
 			$conn = new PDO("mysql:host=localhost;dbname=todo", "root", "mysql");

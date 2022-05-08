@@ -6,6 +6,7 @@
 
 	session_start();
 
+	//Hiermee check ik of de taak van de gebruiker is
 	function checkUserTask($id){
 		$task = getTask(test_input($id));
 

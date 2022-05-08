@@ -1,6 +1,7 @@
 <?php
 	include_once(BASE_URL . 'model/connection/connection.php');
 	
+	//Hiermee wordt een lijst uit de database verwijderd
 	function deletingList($id){
 		$db = createConnection();
 		$sql = "DELETE FROM lists WHERE id = :id";

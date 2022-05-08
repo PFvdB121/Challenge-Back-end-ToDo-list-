@@ -1,5 +1,7 @@
 <?php
 	include_once BASE_URL . 'model/connection/connection.php';
+
+	//Hiermee worden gebruikers geregistreerd in de database
 	function registering($firstName, $insertion, $lastName, $email, $password){
 		$db = createConnection();
 		$sql = "INSERT INTO users(`first name`, `insertion`, `last name`, `email`, `password`, `role`) VALUES (:firstName, :insertion, :lastName, :email, :password, 'standard')";

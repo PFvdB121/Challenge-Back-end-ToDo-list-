@@ -27,14 +27,18 @@
 ?>
 
 	<div>
+
 		<header>
 			<h1>Weet u zeker dat u de taak <?=$task["task"]?> wilt verwijderen uit de lijst <?=$list["name"]?></h1>
 		</header>
+
 		<form action="http://localhost/blok7+8/Challenge-Back-end-ToDo-list-/controller/deletedTask/deletedTask.php" method="POST">
 			<input type="hidden" name="id" value="<?php echo $_GET['id']?>">
 			<input type="submit" value="Ja" class="w3-green buttonLink">
 		</form>
+
 		<a href="http://localhost/blok7+8/Challenge-Back-end-ToDo-list-/view/pages/index.php" class="w3-red buttonLink">Nee</a>
+		
 	</div>
 
 <?php 
